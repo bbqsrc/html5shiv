@@ -106,13 +106,15 @@
    * @param {Document} ownerDocument The context document.
    * @returns {Object} The shived element.
    */
-  function createElement(nodeName, ownerDocument, data){
+  function createElement(nodeName, ownerDocument, data) {
     if (!ownerDocument) {
         ownerDocument = document;
     }
-    if(supportsUnknownElements){
+
+    if (supportsUnknownElements) {
         return ownerDocument.createElement(nodeName);
     }
+    
     if (!data) {
         data = getExpandoData(ownerDocument);
     }
