@@ -178,11 +178,26 @@
 
 
     ownerDocument.createElement = function(nodeName) {
+      var element, evt;
+        
       //abort shiv
       if (!html5.shivMethods) {
-          return data.createElem(nodeName);
+          element = data.createElem(nodeName);
+      } else {
+          element = createElement(nodeName, ownerDocument, data);
       }
-      return createElement(nodeName, ownerDocument, data);
+
+      // fire creation event
+      evt = ownerDocument.createEvent("CustomEvent");
+      evt.initCustomEvent('html5:' + nodeName.toLowerCase(), false, false);
+      Object.defineProperty(evt, 'detail', {
+          get: function() { 
+            return {element: element}
+          }
+      });
+      ownerDocument.dispatchEvent(evt);
+
+      return element;
     };
 
     ownerDocument.createDocumentFragment = Function('h,f', 'return function(){' +
